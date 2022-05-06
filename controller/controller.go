@@ -149,23 +149,16 @@ func UpdateUserInfo(c *gin.Context) {
 }
 
 func DeleteUser(c *gin.Context) {
-	id, _ := c.Params.Get("id")
-	//if !ok {
-	//	c.JSON(http.StatusOK, gin.H{"error": "无效的id"})
-	//	return
-	//}
+	id, ok := c.Params.Get("id")
+	if !ok {
+		c.JSON(http.StatusOK, gin.H{"error": "无效的id"})
+		return
+	}
 	if err := models.DeleteUser(id); err != nil {
-		if strings.Contains(err.Error(), "record not found") {
-			c.JSON(http.StatusBadRequest, gin.H{
-				"code":  1000,
-				"msg":   "fail",
-				"error": "id不存在"})
-		} else {
-			c.JSON(http.StatusOK, gin.H{
-				"code": 1000,
-				"msg":  "fail",
-				"data": "参数错误"})
-		}
+		c.JSON(http.StatusBadRequest, gin.H{
+			"code":  1000,
+			"msg":   "fail",
+			"error": err.Error()})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": 200,
@@ -173,16 +166,3 @@ func DeleteUser(c *gin.Context) {
 			"data": id + "  deleted"})
 	}
 }
-
-//	if err := models.DeleteUser(id); err != nil {
-//		c.JSON(http.StatusBadRequest, gin.H{
-//			"code":  1000,
-//			"msg":   "fail",
-//			"error": err.Error()})
-//	} else {
-//		c.JSON(http.StatusOK, gin.H{
-//			"code": 200,
-//			"msg":  "success",
-//			"data": id + "  deleted"})
-//	}
-//}

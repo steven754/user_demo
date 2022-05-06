@@ -1,7 +1,6 @@
 package models
 
 import (
-	"fmt"
 	"test/mysql"
 )
 
@@ -54,8 +53,6 @@ func UpdateAVisitInfo(userInfo *User) (err error) {
 
 //删除用户
 func DeleteUser(id string) (err error) {
-	//mysql.DB.Where("id = ?", id).First(&User{})
 	err = mysql.DB.Where("id=?", id).Delete(&User{}).Error
-	fmt.Println(err)
 	return
 }
