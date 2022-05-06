@@ -1,6 +1,7 @@
 package models
 
 import (
+	"fmt"
 	"test/mysql"
 )
 
@@ -23,7 +24,7 @@ type User struct {
 
 //创建用户
 func CreateUser(userInfo *User) (err error) {
-	//mysql.DB.Where("account = ?", userInfo.Account).First(&userInfo)
+	mysql.DB.Where("account = ?", userInfo.Account).First(&userInfo)
 	err = mysql.DB.Create(&userInfo).Error
 	return
 }
@@ -53,6 +54,8 @@ func UpdateAVisitInfo(userInfo *User) (err error) {
 
 //删除用户
 func DeleteUser(id string) (err error) {
+	//mysql.DB.Where("id = ?", id).First(&User{})
 	err = mysql.DB.Where("id=?", id).Delete(&User{}).Error
+	fmt.Println(err)
 	return
 }
